@@ -1,30 +1,27 @@
 #include <TinyWireM.h>
 #include <Tiny4kOLED.h>
+#include <GyverButton.h>
 
-// ================================== Defenitions ==================================
-// SSD1306 Settings ==================================
 #define SCREEN_WIDTH  128
 #define SCREEN_HEIGHT 64
+#define STORE_SIZE 2   // Reduced to save memory
 
-// ================================== Grapher Class ==================================
-class Grapher
-{
+#define MOD_CHANGE_PIN PB4
+#define ADC_READ_PIN PB3
+
+typedef void (*generatorFunc)(uint8_t*);
+
+class Grapher {
   private:
-      uint8_t data[SCREEN_WIDTH];
+      uint8_t data[SCREEN_WIDTH];  // Only one screen data buffer
 
   public:
-      Grapher() {
-          memset(data, 0, sizeof(data));
-      }
+      Grapher() { memset(data, 0, sizeof(data)); }
 
-      void apply(void (*genFunc)(uint8_t *)) {
-          genFunc(data);
-      }
+      void apply(generatorFunc genFunc) {genFunc(data); }
 
-      void Display(void (*prefetchFunc)()) {
-
-          prefetchFunc();
-
+      void display() {
+          oled.clear(); 
           for (uint8_t x = 0; x < SCREEN_WIDTH; x++) {
 
               uint8_t y = uint8_t(SCREEN_HEIGHT) - data[x];
@@ -43,62 +40,88 @@ class Grapher
               oled.endData();
           }
       }
+
+      uint8_t* getData() { return data; }
 };
 
-// ================================== Predeclares ==================================
+class MilTimer {
+  private:
+      unsigned long tNext = 0, intervalTime;
+
+  public:
+      MilTimer(unsigned long time) : intervalTime(time) {}
+      bool isDone() {
+          unsigned long now = millis();
+          if (now - tNext >= intervalTime) {
+              tNext = now;
+              return true;
+          }
+          return false;
+      }
+};
+
+class MemStore {
+  private:
+      uint8_t storeArr[STORE_SIZE][SCREEN_WIDTH];  // Reduced store size to 2 for less memory usage
+      uint8_t currentIndex = 0;
+
+  public:
+      uint8_t* getArr() { return storeArr[currentIndex]; }
+
+      void next() { if (++currentIndex >= STORE_SIZE) currentIndex = 0; }
+
+      void push(uint8_t* src) { memcpy(storeArr[currentIndex], src, SCREEN_WIDTH); }
+};
+
 Grapher graph;
-
-void genSaw(uint8_t *arr); // generate "//" lines
-void genSINWave(uint8_t *arr); // generate sin() line
-void genPick(uint8_t *arr); // generate "/\" line
-
-void clean() {
-  oled.clear();
-}
+MilTimer timer1s(1000);
+MemStore store;
+GButton modeBtn(MOD_CHANGE_PIN);
+// GButton ctrlBtn(CTRL_PIN);
+bool streamMode = true;
 
 void setup() {
-  oled.begin(128, 64, sizeof(tiny4koled_init_128x64br), tiny4koled_init_128x64br);
-  oled.clear();
-  oled.on();
+    pinMode(PB1, OUTPUT);
+    oled.begin(128, 64, sizeof(tiny4koled_init_128x64br), tiny4koled_init_128x64br);
+    oled.clear();
+    oled.on();
 }
 
 void loop() {
-  graph.apply(genPick);
-  graph.Display(clean);
-  delay(3*1000);
-
-  graph.apply(genSaw);
-  graph.Display(clean);
-  delay(3*1000);
-
-  graph.apply(genSINWave);
-  graph.Display(clean);
-  delay(3*1000);
-}
+    modeBtn.tick();
+    // ctrlBtn.tick();
 
 
-void genPick(uint8_t *arr) {
-    for (uint8_t x = 0; x < SCREEN_WIDTH; x++) {
-        if (SCREEN_HEIGHT < x) {
-          arr[x] = uint8_t(SCREEN_HEIGHT) - (x - uint8_t(SCREEN_HEIGHT));
-          continue;
-        }
-        arr[x] = x;
+    // if (ctrlBtn.isSingle()) {
+    //     graph.apply(readTemp);
+    //     graph.display();
+    // }
+
+    if (modeBtn.isHold()) store.next();
+    if (modeBtn.isSingle()) {
+      digitalWrite(PB1, HIGH);
+      streamMode = !streamMode;
+      // if (!streamMode) {
+      //   graph.apply(readTemp);
+      //   graph.display();
+      // }
+    }
+
+    if (timer1s.isDone() && streamMode) {
+        graph.apply(osciReadLine);
+        graph.display();
+        store.push(graph.getData());
     }
 }
 
-void genSaw(uint8_t *arr) {
+void osciReadLine(uint8_t *arr) {
     for (uint8_t x = 0; x < SCREEN_WIDTH; x++) {
-        if (SCREEN_HEIGHT < x) {
-          arr[x] = x - uint8_t(SCREEN_HEIGHT);
-          continue;
-        }
-        arr[x] = x;
+        arr[x] = analogRead(ADC_READ_PIN) - 1;
     }
 }
 
-void genSINWave(uint8_t *arr) {
+void readTemp(uint8_t *arr) {
     for (uint8_t x = 0; x < SCREEN_WIDTH; x++) {
-        arr[x] = (uint8_t)( (sin(x * 2 * M_PI / SCREEN_WIDTH) * 0.5 + 0.5) * (SCREEN_HEIGHT - 1) );
+        arr[x] = store.getArr()[x];
     }
 }
