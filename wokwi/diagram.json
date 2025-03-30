@@ -11,35 +11,85 @@
       "left": -28.57,
       "attrs": { "i2cAddress": "0x3c" }
     },
-    { "type": "wokwi-vcc", "id": "vcc1", "top": -143.24, "left": -86.4, "attrs": {} },
     { "type": "wokwi-gnd", "id": "gnd1", "top": 28.8, "left": -58.2, "attrs": {} },
     {
       "type": "wokwi-pushbutton-6mm",
       "id": "btn1",
-      "top": -27,
-      "left": -137.6,
+      "top": -27.5,
+      "left": -137.1,
+      "rotate": 270,
+      "attrs": { "color": "yellow", "xray": "1" }
+    },
+    {
+      "type": "wokwi-resistor",
+      "id": "r4",
+      "top": -72,
+      "left": -144.55,
+      "rotate": 90,
+      "attrs": { "value": "10000" }
+    },
+    {
+      "type": "wokwi-pushbutton-6mm",
+      "id": "btn2",
+      "top": -27.5,
+      "left": -175.5,
       "rotate": 270,
       "attrs": { "color": "blue", "xray": "1" }
     },
     {
       "type": "wokwi-resistor",
-      "id": "r4",
-      "top": -62.4,
-      "left": -144.55,
+      "id": "r1",
+      "top": -72,
+      "left": -182.95,
       "rotate": 90,
       "attrs": { "value": "10000" }
+    },
+    { "type": "wokwi-vcc", "id": "vcc1", "top": -143.24, "left": -201.6, "attrs": {} },
+    {
+      "type": "wokwi-pushbutton-6mm",
+      "id": "btn3",
+      "top": -27.5,
+      "left": -213.9,
+      "rotate": 270,
+      "attrs": { "color": "white", "xray": "1" }
+    },
+    {
+      "type": "wokwi-resistor",
+      "id": "r2",
+      "top": -72,
+      "left": -221.35,
+      "rotate": 90,
+      "attrs": { "value": "10000" }
+    },
+    {
+      "type": "wokwi-text",
+      "id": "text1",
+      "top": 67.2,
+      "left": -211.2,
+      "attrs": {
+        "text": "white: scale    | click - scale up | hold - scale 1x.\nblue: store      | click - display saved | hold - save frame.\nyellow: mode | click - change mode | hold - next mem section\n\n"
+      }
     }
   ],
   "connections": [
     [ "gnd1:GND", "tiny:GND", "black", [ "v0" ] ],
-    [ "tiny:VCC", "vcc1:VCC", "red", [ "v0" ] ],
     [ "tiny:GND", "oled1:GND", "black", [ "h8.4", "v-76.8", "h48" ] ],
-    [ "oled1:VCC", "vcc1:VCC", "red", [ "v-48", "h-105.45" ] ],
-    [ "tiny:PB0", "oled1:SDA", "green", [ "h-1.2", "v-56.4", "h86.4" ] ],
+    [ "tiny:PB0", "oled1:SDA", "magenta", [ "h-1.2", "v-56.4", "h86.4" ] ],
     [ "oled1:SCL", "tiny:PB2", "green", [ "v-38.4", "h-105.3" ] ],
-    [ "btn1:2.l", "tiny:PB4", "blue", [ "v9.6", "h58" ] ],
-    [ "tiny:VCC", "r4:1", "red", [ "v0" ] ],
-    [ "btn1:1.l", "gnd1:GND", "black", [ "v19.2", "h86.4" ] ]
+    [ "btn1:1.l", "gnd1:GND", "black", [ "v0" ] ],
+    [ "btn2:1.l", "gnd1:GND", "black", [ "v0" ] ],
+    [ "btn1:2.l", "tiny:PB5", "yellow", [ "v9.6", "h38.8" ] ],
+    [ "tiny:PB1", "btn2:2.l", "blue", [ "v-18", "h-29.6", "v67.2", "h-67.2" ] ],
+    [ "vcc1:VCC", "oled1:VCC", "red", [ "v0", "h211.2" ] ],
+    [ "vcc1:VCC", "r4:1", "red", [ "v0", "h76.8" ] ],
+    [ "vcc1:VCC", "r1:1", "red", [ "v0", "h38.4" ] ],
+    [ "btn2:2.r", "r1:2", "green", [ "v0" ] ],
+    [ "btn1:2.r", "r4:2", "green", [ "v0" ] ],
+    [ "vcc1:VCC", "tiny:VCC", "red", [ "v0", "h115.2" ] ],
+    [ "btn3:2.r", "r2:2", "green", [ "v0" ] ],
+    [ "vcc1:VCC", "r2:1", "red", [ "v0" ] ],
+    [ "btn3:1.l", "gnd1:GND", "black", [ "v0" ] ],
+    [ "btn3:2.l", "tiny:PB4", "green", [ "v38.4", "h134.8" ] ]
   ],
   "dependencies": {}
 }
