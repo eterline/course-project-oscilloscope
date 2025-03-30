@@ -18,26 +18,28 @@
 // ===========================================================================
 
 class MilTimer {
-  private:
-      unsigned long tNext = 0, intervalTime;
+	private:
+		unsigned long tNext = 0, intervalTime;
 
-  public:
-      MilTimer(unsigned long time) : intervalTime(time) {}
-      bool isDone() {
-          unsigned long now = millis();
+	public:
+		MilTimer(unsigned long time) : intervalTime(time) {}
+		bool isDone() {
+			unsigned long now = millis();
 
-          boolean state = now - tNext >= intervalTime;
-          if (state) tNext = now;
+			boolean state = now - tNext >= intervalTime;
+			if (state) tNext = now;
 
-          return state;
-      }
+			return state;
+		}
 };
 
 // ===========================================================================
 
+// Буфер для экрана
 uint8_t GraphicArray[SCREEN_WIDTH];
 volatile uint8_t scaleFactor = 1;
 
+// Хранилище значений в массиве
 uint8_t SaveArray[STORE_SIZE][SCREEN_WIDTH];
 int SaveArrShift = 0;
 
@@ -64,36 +66,29 @@ void setup() {
 
 	modeBtn.setTimeout(500);
 	storeBtn.setTimeout(500);
-  scaleBtn.setTimeout(500);
+  	scaleBtn.setTimeout(500);
 }
 
 void loop() {
 	modeBtn.tick();
 	storeBtn.tick();
+	scaleBtn.tick();
 	
-	if (scaleBtn.isSingle()) scaleFactor++; // Масштабируем ихображение
-  if (scaleBtn.isHold()) scaleFactor = 1; // Сброс масштаба на экране
+	if (scaleBtn.isSingle()) scaleFactor = scaleFactor + 1; // Масштабируем ихображение
+  	if (scaleBtn.isHold()) scaleFactor = 1; // Сброс масштаба на экране
 
-  // Смена режима отображения из памяти или чтения канала
-	if (modeBtn.isSingle()) {
-		viewMode = !viewMode;
-		return;
-	}
+  	// Смена режима отображения из памяти или чтения канала
+	if (modeBtn.isSingle()) { viewMode = !viewMode; return; }
   
-  // Переключаем секцию памяти через кольцевой буфер
-  if (modeBtn.isSingle()) {
-		SaveArrShift = (SaveArrShift + 1) % STORE_SIZE;
-		return;
-	}
+	// Переключаем секцию памяти через кольцевой буфер
+	if (modeBtn.isSingle()) { SaveArrShift = (SaveArrShift + 1) % STORE_SIZE; return; }
 
-  // Сохраняем уже отображаемый фрейм с графиком в буфер, если стоит режим чтения канала
-  if (storeBtn.isHold() && !viewMode) {
-		saveState = true;
-		return;
-	}
+ 	// Сохраняем уже отображаемый фрейм с графиком в буфер, если стоит режим чтения канала
+  	if (storeBtn.isHold() && !viewMode) { saveState = true; return; }
 	
   // Проверка на режим чтения памяти, если да, то делаем отображение по запросу
-	if (viewMode) {
+	if (viewMode) 
+	{
 		if (storeBtn.isSingle()) {
 			readSavedADC(GraphicArray);
 			oledDisplay(GraphicArray, scaleFactor, false);
@@ -106,7 +101,7 @@ void loop() {
 	{	
 		if (!saveState) readADC(GraphicArray);
 		oledDisplay(GraphicArray, scaleFactor, saveState);
-    saveState = false;
+    	saveState = false;
 	}
 }
 
@@ -122,18 +117,9 @@ void readSavedADC(uint8_t *arr) {
 
 // readADC - формирует массив значений ADC
 void readADC(uint8_t *arr) {
-	int mappedValue;
-	
     for (uint8_t x = 0; x < SCREEN_WIDTH; x++) {
-	    int value = analogRead(ADC_READ_PIN);
-	    
-	    if (value <= 512) {
-	        mappedValue = map(value, 0, 512, 63, 31);
-	    } else {
-	        mappedValue = map(value, 512, 1023, 31, 0);
-	    }
-	
-      	arr[x] = uint8_t(mappedValue);
+	    uint16_t value = analogRead(ADC_READ_PIN);
+      	arr[x] = value>>4;
     }
 }
 
@@ -144,15 +130,15 @@ void oledDisplay(uint8_t* valueArr, uint8_t scale, boolean isSave) {
 	
 		uint8_t pos = x / scale;
 		
-    // Сохрканение отображаемого массива в память по инедксам
+    	// Сохрканение отображаемого массива в память по инедксам
 		if (isSave) SaveArray[SaveArrShift][x] = GraphicArray[pos];
 	
-	  // Вычисление страницы и бита
+	  	// Вычисление страницы и бита
 		// Ограничиваем значение от 0 до 63
 		uint8_t value = (valueArr[pos] > 63) ? 63 : valueArr[pos];
 		
-	    uint8_t page = value / 8;    // Определяем страницу (каждая страница 8 пикселей)
-	    uint8_t shiftBit = 1 << (value % 8);     // Определяем бит в странице
+	    uint8_t page = value / 8;    			// Определяем страницу (каждая страница 8 пикселей)
+	    uint8_t shiftBit = 1 << (value % 8);   	// Определяем бит в странице
 	
 		// Определеяем страницу пространства экрана
 	    oled.setCursor(x, page);
