@@ -123,7 +123,7 @@ void readADC(uint8_t *arr) {
     }
 }
 
-// oledDisplay - отобрпажаем массив в память
+// oledDisplay - отобрпажаем массив в память дисплея
 void oledDisplay(uint8_t* valueArr, uint8_t scale, boolean isSave) {
 	oled.clear();
 	for (uint8_t x = 0; x < SCREEN_WIDTH; x++) {

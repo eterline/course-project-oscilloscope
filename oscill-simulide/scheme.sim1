@@ -4,7 +4,7 @@
 
 <item itemtype="Ssd1306" CircId="Ssd1306-4" mainComp="false" Show_id="true" Show_Val="false" Pos="-60,84" rotation="0" hflip="1" vflip="1" label="Ssd1306-4" idLabPos="-32,-60" labelrot="0" valLabPos="-16,20" valLabRot="0" Color="White" Width="128 _px" Height="64 _px" Rotate="true" Control_Code="60" Frequency="100 _kHz" />
 
-<item itemtype="WaveGen" CircId="WaveGen-46" mainComp="false" Show_id="false" Show_Val="false" Pos="-164,284" rotation="0" hflip="1" vflip="1" label="WaveGen-46" idLabPos="-64,-24" labelrot="0" valLabPos="-16,8" valLabRot="0" Out="true" Running="true" Wave_Type="Sine" Freq="500 Hz" Phase="0 _º" Steps="100 _Steps" Duty="50 _%" Always_On="false" Bipolar="false" Floating="false" Semi_Ampli="5 V" Mid_Volt="0 V" />
+<item itemtype="WaveGen" CircId="WaveGen-46" mainComp="false" Show_id="false" Show_Val="false" Pos="-164,284" rotation="0" hflip="1" vflip="1" label="WaveGen-46" idLabPos="-64,-24" labelrot="0" valLabPos="-16,8" valLabRot="0" Out="true" Running="true" Wave_Type="Sine" Freq="800 Hz" Phase="0 _º" Steps="100 _Steps" Duty="50 _%" Always_On="false" Bipolar="false" Floating="false" Semi_Ampli="5 V" Mid_Volt="0 V" />
 
 <item itemtype="Push" CircId="Push-49" mainComp="false" Show_id="false" Show_Val="false" Pos="-172,84" rotation="0" hflip="1" vflip="1" label="Push-49" idLabPos="-16,-24" labelrot="0" valLabPos="-16,20" valLabRot="0" Norm_Close="false" Poles="1" />
 
