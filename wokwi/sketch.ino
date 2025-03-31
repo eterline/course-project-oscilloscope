@@ -149,6 +149,7 @@ void readADCfromMEM(uint8_t *arr) {
 	}
 }
 
+// saveADCtoMEM - сохраняет из буффера в память
 void saveADCtoMEM(uint8_t *arr) {
 	for (uint8_t x = 0; x < SCREEN_WIDTH; x++)
 	{
@@ -160,7 +161,7 @@ void saveADCtoMEM(uint8_t *arr) {
 void readADC(uint8_t *arr) {
     for (uint8_t x = 0; x < SCREEN_WIDTH; x++) {
 	    uint16_t value = analogRead(ADC_READ_PIN);
-      	arr[x] = value>>4;
+      	arr[x] = uint8_t(value >> 4);
     }
 }
 
@@ -168,9 +169,9 @@ void readADC(uint8_t *arr) {
 void oledDisplay(uint8_t* valueArr, uint8_t scale) {
 	oled.clear();
 	for (uint8_t x = 0; x < SCREEN_WIDTH; x++) {
-		uint8_t pos = x / scale;
-		setOledDot(x, 31);
-	    setOledDot(x, valueArr[pos]);
+		uint8_t y = valueArr[x / scale];
+		setOledDot(x, 31); // Отрисовка центральной линии
+	    setOledDot(x, y);
 	}
 }
 
