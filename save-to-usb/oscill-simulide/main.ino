@@ -76,7 +76,7 @@ void setup() {
     oled.clear();
     oled.on();
 
-	// Преднастройки нтервалов для простоты работы и удобства
+	// Преднастройки нтервалов для простоты работы и удобства, ничего более
 	modeBtn.setTimeout(500);
 	storeBtn.setTimeout(500);
   	scaleBtn.setTimeout(500);
