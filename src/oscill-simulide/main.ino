@@ -10,7 +10,7 @@
 
 #define ADC_READ_PIN  	PB3 // Пин пробы замеров
 
-#define STORE_BTN_PIN 	PB1 // Пин для управление памтью
+#define STORE_BTN_PIN 	PB1 // Пин для управление памятью
 #define SCALE_BTN_PIN 	PB4 // Пин масштабирования изображения
 #define MODE_BTN_PIN  	PB5 // Пин режима
 

@@ -432,10 +432,10 @@
       <a name="matrixcols" val="32"/>
       <a name="matrixrows" val="16"/>
     </comp>
-    <comp lib="8" loc="(353,856)" name="Text">
+    <comp lib="8" loc="(350,855)" name="Text">
       <a name="text" val="Memory"/>
     </comp>
-    <comp lib="8" loc="(477,121)" name="Text">
+    <comp lib="8" loc="(475,120)" name="Text">
       <a name="text" val="Signal generator"/>
     </comp>
     <comp lib="8" loc="(550,535)" name="Text">
@@ -447,22 +447,22 @@
     <comp lib="8" loc="(555,305)" name="Text">
       <a name="text" val="Present register"/>
     </comp>
-    <comp lib="8" loc="(607,123)" name="Text">
+    <comp lib="8" loc="(605,120)" name="Text">
       <a name="text" val="bit step"/>
     </comp>
-    <comp lib="8" loc="(613,49)" name="Text">
+    <comp lib="8" loc="(610,45)" name="Text">
       <a name="text" val="input value"/>
     </comp>
-    <comp lib="8" loc="(684,31)" name="Text">
+    <comp lib="8" loc="(680,30)" name="Text">
       <a name="text" val="ADC"/>
     </comp>
-    <comp lib="8" loc="(927,248)" name="Text">
+    <comp lib="8" loc="(925,245)" name="Text">
       <a name="text" val="Addr in page"/>
     </comp>
-    <comp lib="8" loc="(937,500)" name="Text">
+    <comp lib="8" loc="(935,500)" name="Text">
       <a name="text" val="RAM Page shift"/>
     </comp>
-    <comp lib="8" loc="(949,822)" name="Text">
+    <comp lib="8" loc="(945,820)" name="Text">
       <a name="text" val="Show mode ticker"/>
     </comp>
     <wire from="(100,460)" to="(150,460)"/>
@@ -813,13 +813,13 @@
     <comp lib="8" loc="(175,145)" name="Text">
       <a name="text" val="input value"/>
     </comp>
-    <comp lib="8" loc="(176,230)" name="Text">
+    <comp lib="8" loc="(175,230)" name="Text">
       <a name="text" val="bit step"/>
     </comp>
-    <comp lib="8" loc="(392,1108)" name="Text">
+    <comp lib="8" loc="(390,1105)" name="Text">
       <a name="text" val="input value"/>
     </comp>
-    <comp lib="8" loc="(393,1183)" name="Text">
+    <comp lib="8" loc="(390,1180)" name="Text">
       <a name="text" val="bit step"/>
     </comp>
     <wire from="(210,160)" to="(210,170)"/>
