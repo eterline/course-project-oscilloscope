@@ -1,0 +1,4 @@
+oscyllo-tool
+build/*
+!build/.keep
+!cmd/*
